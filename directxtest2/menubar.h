@@ -1,0 +1,9 @@
+
+//MENU_ID
+#define	MENU_ID_OPEN  100
+#define	MENU_ID_NSAVE 101
+#define	MENU_ID_SAVE 102
+#define MENU_ID_END_A 103
+#define	MENU_ID_CONFIG 104
+#define	MENU_ID_OPTION 105
+#define MENU_ID_END_B 106

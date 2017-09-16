@@ -1,0 +1,19 @@
+#include<windows.h>
+#include"menubar.h"
+
+MENUBAR MENU DISCARDABLE
+BEGIN
+	POPUP "ファイル(&F)" 
+	BEGIN
+		MENUITEM "開く(&O)",MENU_ID_OPEN
+		MENUITEM "名前をつけて保存(&A)",MENU_ID_NSAVE
+		MENUITEM "上書き保存(&S)",MENU_ID_SAVE
+		MENUITEM "閉じる(&C)",MENU_ID_END_A
+	END
+	POPUP "表示" 
+	BEGIN
+		MENUITEM "設定",MENU_ID_CONFIG
+		MENUITEM "オプション",MENU_ID_OPTION
+		MENUITEM "閉じる(&C)",MENU_ID_END_B
+	END
+END
