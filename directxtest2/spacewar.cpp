@@ -39,6 +39,7 @@ void Spacewar::initialize(HWND hwnd)
 {
 	Game::initialize(hwnd); // throws GameError
 
+	//画像のロード(ファイルへのパスはconstantsに記載)
 	if (!backscreenTexture.initialize(graphics, BACKSCREEN_IMAGE)) {
 		throw(GameError(gameErrorNS::FATAL_ERROR,
 			"Error initializing backscreen texture"));
@@ -88,8 +89,8 @@ void Spacewar::update()
 		MessageBox(NULL, "B", "input", MB_OK);
 	}
 	input->vibrateControllers(frameTime);
-	input->gamePadVibrateLeft(0, 65535, 1);
-	input->gamePadVibrateRight(0, 65535, 1);
+	input->gamePadVibrateLeft(0, 65535, 1.0f);
+	input->gamePadVibrateRight(0, 65535, 1.0f);
 }
 
 //ai
