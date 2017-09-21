@@ -10,7 +10,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define CLASS_NAME "DirectX9 API test"
 
-#include <windows.h>
+#include<windows.h>
 
 //-----------------------------------------------
 // Useful macros

@@ -10,6 +10,7 @@
 #include "spaceWar.h"
 #include<stdio.h>
 #include<time.h>
+#include<xaudio2.h>
 
 //”wŒiF•Ï”
  static int red = 0, green = 0, blue = 0;

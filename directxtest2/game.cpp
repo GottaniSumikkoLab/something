@@ -194,5 +194,6 @@ void Game::deleteAll() {
 	releaseAll();
 	SAFE_DELETE(graphics);
 	SAFE_DELETE(input);
+	//SAFE_DELETE(sound);
 	initialized = false;
 }
