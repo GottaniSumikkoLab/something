@@ -108,6 +108,9 @@ void Spacewar::render()
 	graphics->spriteBegin();
 	backscreen.draw();
 	foxtyann.fadeIn(frameTime,FADEOUT_TIME);
+	if (foxtyann.getfadejudge() == true) {
+		foxtyann.draw();
+	}
 	graphics->spriteEnd();
 
 }

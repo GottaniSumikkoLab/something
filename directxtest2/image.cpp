@@ -29,7 +29,7 @@ Image::Image() {
 	visible = true;
 	loop = true;
 	animComplete = false;
-	fadeComplete = false;
+	fadejudge = false;
 	graphics = NULL;
 	colorFilter = graphicsNS::WHITE;
 }
@@ -98,7 +98,7 @@ void Image::draw(SpriteData sd, COLOR_ARGB color) {
 		graphics->drawSprite(sd, color);
 	}
 	fadealpha = 255;
-	fadeComplete = true;
+	fadejudge = true;
 }
 
 void Image::update(float frameTime) {
@@ -143,7 +143,7 @@ inline void Image::setRect() {
 //フェードアウト
 void Image::fadeOut(float frameTime, float fadeoutTime) {
 
-	if (fadeComplete != false) {
+	if (fadejudge != false) {
 		if (fadeoutTime > 0) {
 			if (fadeTimer < fadeoutTime) {
 				fadealpha = (int)(255 - 255 * fadeTimer / fadeoutTime);
@@ -153,16 +153,16 @@ void Image::fadeOut(float frameTime, float fadeoutTime) {
 			else {
 				fadealpha = 0;
 				fadeTimer = 0.0f;
-				fadeComplete = false;
+				fadejudge = false;
 			}
 		}//fadeoutTimer >0
-	}//fadeComplete != false
+	}//fadejudge != false
 }
 
 //フェードイン
 void Image::fadeIn(float frameTime, float fadeinTime) {
 
-	if (fadeComplete != true) {
+	if (fadejudge != true) {
 		if (fadeinTime > 0) {
 			if (fadeTimer < fadeinTime) {
 				fadealpha = (int)(255 * fadeTimer / fadeinTime);
@@ -173,9 +173,9 @@ void Image::fadeIn(float frameTime, float fadeinTime) {
 				fadealpha = 255;
 				fadeTimer = 0.0f;
 				draw();
-				fadeComplete = true;
+				fadejudge = true;
 			}
 		}//fadeinTimer > 0
-	}//fadeComplete != true
+	}//fadejudge != true
 }
 

@@ -27,7 +27,7 @@ class Image {
 		bool visible;//画像の可視判定
 		bool initialized;//初期化の判定
 		bool animComplete;//アニメーション終了判定
-		bool fadeComplete;//フェード判定
+		bool fadejudge;//フェード判定
 
 	public:
 		Image();
@@ -51,6 +51,7 @@ class Image {
 		virtual RECT getSpritaDataRect() { return spriteData.rect; }//SpriteDataの四角
 		virtual bool getAnimationComplete() { return animComplete; }//アニメーションの終了の判定
 		virtual COLOR_ARGB getColorFilter() { return colorFilter; }//画像をフィルタする色
+		virtual bool getfadejudge() { return fadejudge; }//フェード判定可能の判定
 
 		//パラメータ設定メソッド
 		virtual void setX(float newX) { spriteData.x = newX; }

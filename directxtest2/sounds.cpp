@@ -46,7 +46,7 @@ void Sound::initialize() {
 		}
 	}
 
-	//マスターヴォイスの生成
+	//マスターボイスの生成
 	if (FAILED(hr = xaudio->CreateMasteringVoice(&mastering_voice,XAUDIO2_DEFAULT_CHANNELS,
 		XAUDIO2_DEFAULT_SAMPLERATE,0,preferredDevice,NULL))) {
 		throw("CreateMasteringVOice");
@@ -54,20 +54,16 @@ void Sound::initialize() {
 	}
 }
 
-//ソースヴォイスの生成
+//ソースボイスの生成
 void Sound::CreateSVoice() {
 	
-	HRESULT hr;
-	if (FAILED(hr = xaudio->CreateSourceVoice(&mastering_voice, ))) {
-		throw("CreateSourceVoice");
-	}
 }
 
 //エンジンの解放
 void Sound::cleanup() {
-	//ソースヴォイスの解放
+	//ソースボイスの解放
 
-	//マスターヴォイスの解放
+	//マスターボイスの解放
 	if (mastering_voice != NULL) {
 		mastering_voice->DestroyVoice();
 		mastering_voice = NULL;

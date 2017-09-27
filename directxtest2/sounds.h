@@ -6,8 +6,8 @@
 class Sound {
 
 private:
-	static IXAudio2* xaudio;//XAudio2インターフェース
-	static IXAudio2MasteringVoice* mastering_voice;//マスターヴォイス
+	IXAudio2* xaudio;//XAudio2インターフェース
+	IXAudio2MasteringVoice* mastering_voice;//マスターボイス
 
 
 public:

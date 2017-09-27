@@ -164,6 +164,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sounds.cpp" />
     <ClCompile Include="spacewar.cpp" />
+    <ClCompile Include="text.cpp" />
     <ClCompile Include="textureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +177,7 @@
     <ClInclude Include="menubar.h" />
     <ClInclude Include="sounds.h" />
     <ClInclude Include="spacewar.h" />
+    <ClInclude Include="text.h" />
     <ClInclude Include="textureManager.h" />
   </ItemGroup>
   <ItemGroup>
