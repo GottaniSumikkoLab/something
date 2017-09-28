@@ -149,6 +149,21 @@ public:
 	HRESULT loadTexture(const char *filename,COLOR_ARGB transcolor,UINT &width,UINT &height,LP_TEXTURE &texture);
 
 	void drawSprite(const SpriteData &spliteData, COLOR_ARGB color = graphicsNS::WHITE);
+
+	LP_3D get3D() { return direct3d; }
+
+	LP_3DDEVICE get3Ddevice() { return device3d; }
+
+	LP_SPRITE getSprite() { return sprite; }
+
+	HDC getDC() { return GetDC(hwnd); }
+
+	bool getFullscreen() { return fullscreen; }
+
+	void setFullscreen(bool FullScreen) {
+		fullscreen = FullScreen;
+		return;
+	}
 };
 
 #endif

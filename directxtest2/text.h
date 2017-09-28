@@ -14,7 +14,7 @@ private:
 	LP_DXFONT dxFont;
 	RECT fontRect;
 
-	D3DMATRIX matrix;
+	D3DXMATRIX matrix;
 	float angle;
 
 public:
@@ -42,13 +42,13 @@ public:
 	virtual COLOR_ARGB getFontColor() { return color; }
 
 	//文字列角度設定
-	virtual float setDegrees(float deg) { return angle*(180.0f / (float)PI); }
+	virtual float setDegrees(float deg) { return angle = deg*((float)PI / 180.0f); }
 
 	//文字列rad設定
-	virtual float setRadians(float rad) { return angle; }
+	virtual float setRadians(float rad) { return angle = rad; }
 
 	//文字列色設定
-	virtual COLOR_ARGB setFontColor(COLOR_ARGB c) { return color; }
+	virtual COLOR_ARGB setFontColor(COLOR_ARGB c) { return color = c; }
 
 	//リソースの開放
 	virtual void onLostDevice();

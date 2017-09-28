@@ -11,6 +11,7 @@
 #include"constants.h"
 #include"gameError.h"
 #include"input.h"
+#include"text.h"
 
 class Game {
 
@@ -24,6 +25,7 @@ protected:
 	LARGE_INTEGER timerFreq;//パフォーマンスカウンタの周波数
 	float frameTime;//最後のフレームに要した時間
 	float fps;//フレームレート（１秒当たりのフレーム数）
+	bool fpsOn;
 	DWORD sleepTime;//フレーム間でスリープする時間
 	bool paused;//ゲームが一時停止されている時間
 	bool initialized;

@@ -15,6 +15,9 @@
 //背景色変数
  static int red = 0, green = 0, blue = 0;
 
+ std::string buf = "fps:";
+ std::string fp;
+
 //シード値初期化
 inline void InitRand() {
 	srand((unsigned int)time(NULL));
@@ -39,6 +42,8 @@ Spacewar::~Spacewar()
 void Spacewar::initialize(HWND hwnd)
 {
 	Game::initialize(hwnd); // throws GameError
+	const int BUF_SIZE = 20;
+	fpsOn = true;
 
 	//画像のロード(ファイルへのパスはconstantsに記載)
 	if (!backscreenTexture.initialize(graphics, BACKSCREEN_IMAGE)) {
@@ -60,6 +65,13 @@ void Spacewar::initialize(HWND hwnd)
 		throw(GameError(gameErrorNS::FATAL_ERROR,
 			"Error initializing foxtyannTexture"));
 	}
+
+	//フォントの初期化
+	if (text.initialize(graphics, POINT_SIZE, false, false, FONT) == false) {
+		throw(GameError(gameErrorNS::FATAL_ERROR,"text"));
+	}
+	text.setFontColor(graphicsNS::WHITE);
+
 	//背景
 	backscreen.setX(0.0f);
 	backscreen.setY(0.0f);
@@ -80,7 +92,7 @@ void Spacewar::update()
 	//エスケープキーでアプリケーションを終了
 	if (input->isKeyDown(ESC_KEY)==true) {
 		PostQuitMessage(0);
-	}//if
+	}
 
 	//gamepad
 	if (input->getGamepadA(0)) {
@@ -110,6 +122,12 @@ void Spacewar::render()
 	foxtyann.fadeIn(frameTime,FADEOUT_TIME);
 	if (foxtyann.getfadejudge() == true) {
 		foxtyann.draw();
+	}
+	if (fpsOn == true) {
+		
+		fp = buf + std::to_string((int)fps);
+
+		text.print(fp, 0, 0);
 	}
 	graphics->spriteEnd();
 

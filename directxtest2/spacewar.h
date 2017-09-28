@@ -22,6 +22,7 @@ private:
 	TextureManager foxtyannTexture;
 	Image backscreen;
 	Image foxtyann;
+	Text text;
 
 public:
 	// Constructor

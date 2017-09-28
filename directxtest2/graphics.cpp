@@ -47,7 +47,7 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
 	}
 
 	initD3Dpp();        // init D3D presentation parameters
-	if (fullscreen)      // if full-screen mode
+	if (fullscreen == true)      // if full-screen mode
 	{
 		if (isAdapterCompatible()) {   // is the adapter compatible
 									 // set the refresh rate with a compatible one

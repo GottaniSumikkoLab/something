@@ -36,6 +36,10 @@ const char BACKSCREEN_IMAGE[] = "pictures\\blackboard.bmp";
 const char FOXTYANN_IMAGE[] = "pictures\\foxtyann.png";
 const float FADEOUT_TIME = 3.0f;//second
 
+//text
+const char FONT[] = "Courier New";
+const int POINT_SIZE = 20;
+
 // window
 const bool FULLSCREEN = false;              // windowed or FULLSCREEN
 const UINT  GAME_WIDTH = 1280;              // width of game in pixels
@@ -46,7 +50,7 @@ const UINT  GAME_HEIGHT = 720;              // height of game in pixels
 //game
 const double PI = 3.14159265;
 const float FRAME_RATE = 60.0f;//frame per second
-const float MIN_FRAME_RATE = 10.0f;//min frame per second
+const float MIN_FRAME_RATE = 20.0f;//min frame per second
 const float MIN_FRAME_TIME = 1.0f / FRAME_RATE;//target second
 const float MAX_FRAME_TIME = 1.0f / MIN_FRAME_RATE;//max second
 

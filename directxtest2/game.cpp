@@ -11,6 +11,8 @@ Game::Game() {
 	input = new Input();
 	paused = false;
 	graphics = NULL;
+	fps = 30.0f;
+	fpsOn = false;
 	initialized = false;
 }
 //デストラクタ
