@@ -106,7 +106,7 @@ bool CreateMainWindow(HWND &hWnd,HINSTANCE hInstance, int nCmdShow) {
 
 	//ウィンドウスタイル
 	DWORD style;
-	if (FULLSCREEN) {
+	if (FULLSCREEN == true) {
 		style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP |WS_CAPTION;
 	}//if
 	else {
@@ -132,7 +132,7 @@ bool CreateMainWindow(HWND &hWnd,HINSTANCE hInstance, int nCmdShow) {
 		return false;//エラーで終了
 	}
 
-	if (!FULLSCREEN)             // if window
+	if (FULLSCREEN == false)             // if window
 	{
 		//GAME_WIDTH x GAME_HEIGHTをクライアント座標
 		RECT clientRect;

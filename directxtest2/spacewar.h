@@ -10,6 +10,7 @@
 #include "game.h"
 #include"textureManager.h"
 #include"image.h"
+#include"sounds.h"
 
 //=============================================================================
 // Create game class

@@ -11,7 +11,8 @@ Game::Game() {
 	input = new Input();
 	paused = false;
 	graphics = NULL;
-	fps = 30.0f;
+	sound = NULL;
+	fps = 60.0f;
 	fpsOn = false;
 	initialized = false;
 }
@@ -54,7 +55,6 @@ LRESULT Game::messageHandler(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) {
 		case WM_MBUTTONDOWN:
 			input->setMouseMButton(true);
 			input->mouseIn(lParam);
-			
 			return(0);
 		case WM_MBUTTONUP:
 			input->setMouseMButton(false);
@@ -97,7 +97,11 @@ void Game::initialize(HWND hw) {
 
 	graphics = new Graphics();
 
+	sound = new Sound();
+
 	graphics->initialize(hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
+
+	sound->initialize();
 
 	input->initialize(hwnd, false);
 
@@ -195,7 +199,7 @@ void Game::resetAll() {
 void Game::deleteAll() {
 	releaseAll();
 	SAFE_DELETE(graphics);
+	SAFE_DELETE(sound);
 	SAFE_DELETE(input);
-	//SAFE_DELETE(sound);
 	initialized = false;
 }

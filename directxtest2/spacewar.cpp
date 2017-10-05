@@ -10,7 +10,6 @@
 #include "spaceWar.h"
 #include<stdio.h>
 #include<time.h>
-#include<xaudio2.h>
 
 //”wŒiF•Ï”
  static int red = 0, green = 0, blue = 0;
@@ -104,6 +103,9 @@ void Spacewar::update()
 	input->vibrateControllers(frameTime);
 	input->gamePadVibrateLeft(0, 65535, 1.0f);
 	input->gamePadVibrateRight(0, 65535, 1.0f);
+
+	//sioundtest
+	sound->soundtest();
 }
 
 //ai

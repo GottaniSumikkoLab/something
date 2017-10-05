@@ -12,12 +12,14 @@
 #include"gameError.h"
 #include"input.h"
 #include"text.h"
+#include"sounds.h"
 
 class Game {
 
 protected:
 	Graphics *graphics;
 	Input *input;
+	Sound *sound;
 	HWND hwnd;//ウィンドウハンドル
 	HRESULT hr;//標準の戻り型
 	LARGE_INTEGER timeStart;//パフォーマンスカウンタの開始値

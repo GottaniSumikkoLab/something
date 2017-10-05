@@ -5,6 +5,7 @@
 Sound::Sound() {
 	xaudio = NULL;
 	mastering_voice = NULL;
+	source_voice = NULL;
 }
 
 //デストラクタ
@@ -50,7 +51,7 @@ void Sound::initialize() {
 	if (FAILED(hr = xaudio->CreateMasteringVoice(&mastering_voice,XAUDIO2_DEFAULT_CHANNELS,
 		XAUDIO2_DEFAULT_SAMPLERATE,0,preferredDevice,NULL))) {
 		throw("CreateMasteringVOice");
-		//SAFE_RELEASE(xaudio)
+		SAFE_RELEASE(xaudio);
 	}
 }
 
@@ -74,4 +75,45 @@ void Sound::cleanup() {
 		xaudio = NULL;
 	}
 	CoUninitialize();
+}
+
+void Sound::soundtest() {
+
+	HRESULT hr;
+
+	WAVEFORMATEX format = { 0 };
+
+	format.wFormatTag = WAVE_FORMAT_PCM;
+	format.nChannels = 1;//モノラル
+	format.wBitsPerSample = 16;//サンプル当たりの量子化16bit
+	format.nSamplesPerSec = 44100;//サンプリング周波数
+	format.nBlockAlign = format.wBitsPerSample / 8 * format.nChannels;
+	format.nAvgBytesPerSec = format.nSamplesPerSec*format.nBlockAlign;
+
+	if (FAILED(hr = xaudio->CreateSourceVoice(&source_voice, &format))) {
+		throw("CreateSourceVoice");
+	}
+
+	std::vector<BYTE>data(format.nAvgBytesPerSec * 1);//バッファ
+
+	short* p = (short*)&data[0];
+	for (size_t i = 0; i < data.size() / 2; i++) {
+		float length = format.nSamplesPerSec / 440.0f;
+		*p = (short)(32767 * sinf(i*PI / (length / 2)));
+		p++;
+	}
+
+	XAUDIO2_BUFFER buffer = { 0 };
+	buffer.AudioBytes = data.size();//バッファのバイト数
+	buffer.pAudioData = &data[0];//バッファの先頭アドレス
+	buffer.Flags = XAUDIO2_END_OF_STREAM;//バッファの後ろに予期しないデータがある場合教える
+	source_voice->SubmitSourceBuffer(&buffer);
+
+	source_voice->Start();
+	MessageBox(NULL, "演奏を終了します", "", MB_OK);
+
+	source_voice->Stop();
+	source_voice->DestroyVoice();
+
+	return;
 }
