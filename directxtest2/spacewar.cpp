@@ -80,6 +80,8 @@ void Spacewar::initialize(HWND hwnd)
 	foxtyann.setY(0.0f);
 	//きつねちゃんスケール
 	foxtyann.setScale(0.5f);
+	//朝ちゅんロード
+	sound->LoadWaveFile(TESTVOICE);
 	//きつねちゃん透過率
 	return;
 }
@@ -103,9 +105,9 @@ void Spacewar::update()
 	input->vibrateControllers(frameTime);
 	input->gamePadVibrateLeft(0, 65535, 1.0f);
 	input->gamePadVibrateRight(0, 65535, 1.0f);
-
-	//sioundtest
-	sound->soundtest();
+	sound->Play();
+	MessageBox(NULL, "再生中…", "Sound", MB_OK);
+	sound->Stop();
 }
 
 //ai

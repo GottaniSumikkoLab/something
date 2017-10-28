@@ -97,9 +97,9 @@ void Game::initialize(HWND hw) {
 
 	graphics = new Graphics();
 
-	sound = new Sound();
-
 	graphics->initialize(hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
+
+	sound = Sound::GetInst();
 
 	sound->initialize();
 
@@ -199,7 +199,6 @@ void Game::resetAll() {
 void Game::deleteAll() {
 	releaseAll();
 	SAFE_DELETE(graphics);
-	SAFE_DELETE(sound);
 	SAFE_DELETE(input);
 	initialized = false;
 }

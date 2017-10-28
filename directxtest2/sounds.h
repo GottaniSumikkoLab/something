@@ -1,24 +1,38 @@
-//sound.h
-#ifndef _SOUND_H
-#define _SOUND_H
+//sounds.h
+#ifndef _SOUNDS_H
+#define _SOUNDS_H
+#define WIN_DCOM //CoInitializeEx関数使用を宣言
+
 #include<xaudio2.h>
 #include<vector>
-#include<math.h>
 #include"constants.h"
+#include"wave.h"
 
+//シングルトン
 class Sound {
 
 private:
-	IXAudio2* xaudio;//XAudio2インターフェース
-	IXAudio2MasteringVoice* mastering_voice;//マスターボイス
+	static IXAudio2* xaudio;//XAudio2インターフェース
+	static IXAudio2MasteringVoice* mastering_voice;//マスターボイス
+	IXAudio2SourceVoice* source_voice;//ソースボイス
+	WAVEFORMATEX wave_format;
+	Wave wave_sound;
+	bool select;
 
-	IXAudio2SourceVoice* source_voice;
+private:
+	Sound();//コンストラクタ
+	Sound(const Sound&);
+	~Sound();
+	Sound& operator=(const Sound&);
+	bool CreateSVoice();//ソースボイスの生成
+
 public:
-	Sound();
-	virtual ~Sound();
-	void initialize();
-	void CreateSVoice();
-	void cleanup();
-	void soundtest();
+	static Sound* GetInst();//インスタンスの生成
+	bool initialize();//初期化
+	bool LoadWaveFile(const char *fp);
+	bool Submit();//データをキューに送る
+	void Play();//再生
+	void Stop();//停止
+	void cleanup();//解放
 };
 #endif

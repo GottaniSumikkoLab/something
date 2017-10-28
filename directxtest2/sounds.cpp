@@ -1,11 +1,13 @@
 //sound.cpp
 #include"sounds.h"
 
+IXAudio2 *Sound::xaudio = NULL;
+IXAudio2MasteringVoice *Sound::mastering_voice = NULL;
+
 //コンストラクタ
-Sound::Sound() {
-	xaudio = NULL;
-	mastering_voice = NULL;
-	source_voice = NULL;
+Sound::Sound():source_voice(NULL) {
+	ZeroMemory(&wave_format, sizeof(wave_format));
+	select = false;
 }
 
 //デストラクタ
@@ -13,8 +15,13 @@ Sound::~Sound() {
 	this->cleanup();
 }
 
+Sound* Sound::GetInst() {
+	static Sound Inst;
+	return &Inst;
+}
+
 //初期化
-void Sound::initialize() {
+bool Sound::initialize() {
 
 	HRESULT hr;//インスタンスハンドル
 	UINT32 flags = 0;//動作フラグ
@@ -25,6 +32,7 @@ void Sound::initialize() {
 	//COMの初期化
 	if (FAILED(hr = CoInitializeEx(NULL, COINIT_MULTITHREADED))) {
 		throw("CoinitializeEx");
+		return false;
 	}
 
 #ifdef _DEBUG
@@ -34,17 +42,22 @@ void Sound::initialize() {
 	//XAudio2エンジンのインスタンスの生成
 	if (FAILED(hr = XAudio2Create(&xaudio, flags,XAUDIO2_DEFAULT_PROCESSOR))) {
 		throw("XAudio2Create");
+		return false;
 	}
+	if (select == true) {
+		//オーディオデバイスの数取得
+		xaudio->GetDeviceCount(&deviceCount);
 
-	//オーディオデバイスの数取得
-	xaudio->GetDeviceCount(&deviceCount);
-
-	//最適なオーディオデバイスのインデックスを指定
-	for (unsigned int i = 0; i < deviceCount; i++) {
-		xaudio->GetDeviceDetails(i, &deviceDetails);
-		if (deviceDetails.OutputFormat.Format.nChannels > 2) {
-			preferredDevice = i;
+		//最適なオーディオデバイスのインデックスを指定
+		for (unsigned int i = 0; i < deviceCount; i++) {
+			xaudio->GetDeviceDetails(i, &deviceDetails);
+			if (deviceDetails.OutputFormat.Format.nChannels > 2) {
+				preferredDevice = i;
+			}
 		}
+	}
+	else {
+		preferredDevice = 0;
 	}
 
 	//マスターボイスの生成
@@ -52,18 +65,60 @@ void Sound::initialize() {
 		XAUDIO2_DEFAULT_SAMPLERATE,0,preferredDevice,NULL))) {
 		throw("CreateMasteringVOice");
 		SAFE_RELEASE(xaudio);
+		return false;
 	}
+	OutputDebugString("サウンドデバイスの初期化成功\n");
+	return true;
 }
 
-//ソースボイスの生成
-void Sound::CreateSVoice() {
+bool Sound::CreateSVoice() {
 	
+	HRESULT hr;//インスタンスハンドル
+	if (FAILED(hr = xaudio->CreateSourceVoice(&source_voice,&wave_sound.GetFormatEX() ))) {
+		throw("CreateSourceVoice");
+		return false;
+	}
+	return true;
+}
+
+bool Sound::Submit() {
+	XAUDIO2_BUFFER wSubmit = { 0 };
+	wSubmit.AudioBytes = wave_sound.GetWaveSize();
+	wSubmit.pAudioData = wave_sound.GetWaveData();
+	wSubmit.Flags = XAUDIO2_END_OF_STREAM;
+	if (source_voice->SubmitSourceBuffer(&wSubmit) != S_OK) {
+		throw("音楽データ送信失敗");
+		return false;
+	}
+	return true;
+}
+
+bool Sound::LoadWaveFile(const char *fp) {
+
+	//Waveクラスを用いてロード
+	if (wave_sound.LoadWave(fp) == NULL) {
+		return false;
+	}
+	//ソースボイスの生成
+	if (this->CreateSVoice() == false){
+		return false;
+	}
+	//キューに送信
+	if (this->Submit() == false) {
+		return false;
+	}
+	OutputDebugString("Waveファイルロード成功");
+	return true;
 }
 
 //エンジンの解放
 void Sound::cleanup() {
 	//ソースボイスの解放
-
+	if (source_voice != NULL) {
+		source_voice->Stop(0);
+		source_voice->DestroyVoice();
+		source_voice = NULL;
+	}
 	//マスターボイスの解放
 	if (mastering_voice != NULL) {
 		mastering_voice->DestroyVoice();
@@ -77,43 +132,14 @@ void Sound::cleanup() {
 	CoUninitialize();
 }
 
-void Sound::soundtest() {
-
-	HRESULT hr;
-
-	WAVEFORMATEX format = { 0 };
-
-	format.wFormatTag = WAVE_FORMAT_PCM;
-	format.nChannels = 1;//モノラル
-	format.wBitsPerSample = 16;//サンプル当たりの量子化16bit
-	format.nSamplesPerSec = 44100;//サンプリング周波数
-	format.nBlockAlign = format.wBitsPerSample / 8 * format.nChannels;
-	format.nAvgBytesPerSec = format.nSamplesPerSec*format.nBlockAlign;
-
-	if (FAILED(hr = xaudio->CreateSourceVoice(&source_voice, &format))) {
-		throw("CreateSourceVoice");
+void Sound::Play() {
+	if (source_voice != NULL) {
+		source_voice->Start(0);
 	}
+}
 
-	std::vector<BYTE>data(format.nAvgBytesPerSec * 1);//バッファ
-
-	short* p = (short*)&data[0];
-	for (size_t i = 0; i < data.size() / 2; i++) {
-		float length = format.nSamplesPerSec / 440.0f;
-		*p = (short)(32767 * sinf(i*PI / (length / 2)));
-		p++;
+void Sound::Stop() {
+	if (source_voice != NULL) {
+		source_voice->Stop(0);
 	}
-
-	XAUDIO2_BUFFER buffer = { 0 };
-	buffer.AudioBytes = data.size();//バッファのバイト数
-	buffer.pAudioData = &data[0];//バッファの先頭アドレス
-	buffer.Flags = XAUDIO2_END_OF_STREAM;//バッファの後ろに予期しないデータがある場合教える
-	source_voice->SubmitSourceBuffer(&buffer);
-
-	source_voice->Start();
-	MessageBox(NULL, "演奏を終了します", "", MB_OK);
-
-	source_voice->Stop();
-	source_voice->DestroyVoice();
-
-	return;
 }

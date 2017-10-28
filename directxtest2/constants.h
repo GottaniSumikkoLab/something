@@ -32,9 +32,12 @@
 //-----------------------------------------------
 
 //graphics images
-const char BACKSCREEN_IMAGE[] = "pictures\\blackboard.bmp";
-const char FOXTYANN_IMAGE[] = "pictures\\foxtyann.png";
+const char BACKSCREEN_IMAGE[] = "pic\\blackboard.bmp";
+const char FOXTYANN_IMAGE[] = "pic\\foxtyann.png";
 const float FADEOUT_TIME = 3.0f;//second
+
+//sound data
+const char TESTVOICE[] = "sou\\bird.wav";
 
 //text
 const char FONT[] = "Courier New";
